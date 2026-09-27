@@ -1,0 +1,66 @@
+using FluentValidation;
+using HR.Application.DTOs.EmployeeDocuments;
+using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HR.API.Controllers;
+[ApiController, Route("api/[controller]")]
+public class EmployeeDocumentsController : ControllerBase
+{
+    private readonly IEmployeeDocumentService _employeeDocumentService;
+    private readonly IValidator<CreateEmployeeDocumentDto> _createValidator;
+    private readonly IValidator<UpdateEmployeeDocumentDto> _updateValidator;
+
+    public EmployeeDocumentsController(
+        IEmployeeDocumentService employeeDocumentService,
+        IValidator<CreateEmployeeDocumentDto> createValidator,
+        IValidator<UpdateEmployeeDocumentDto> updateValidator)
+    {
+        _employeeDocumentService = employeeDocumentService;
+        _createValidator = createValidator;
+        _updateValidator = updateValidator;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<EmployeeDocumentDto>>> GetAll(CancellationToken cancellationToken) => Ok(await _employeeDocumentService.GetAllAsync(cancellationToken));
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<EmployeeDocumentDto>> GetById(long id, CancellationToken cancellationToken)
+    {
+        var result = await _employeeDocumentService.GetByIdAsync(id, cancellationToken);
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<EmployeeDocumentDto>> Create(CreateEmployeeDocumentDto dto, CancellationToken cancellationToken)
+    {
+        var validationResult = await _createValidator.ValidateAsync(dto, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+        try
+        {
+            var result = await _employeeDocumentService.CreateAsync(dto, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Conflict(new { message = exception.Message });
+        }
+    }
+
+    [HttpPut("{id:long}")]
+    public async Task<IActionResult> Update(long id, UpdateEmployeeDocumentDto dto, CancellationToken cancellationToken)
+    {
+        var validationResult = await _updateValidator.ValidateAsync(dto, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+        try
+        {
+            return await _employeeDocumentService.UpdateAsync(id, dto, cancellationToken) ? NoContent() : NotFound();
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Conflict(new { message = exception.Message });
+        }
+    }
+}
+

@@ -1,0 +1,15 @@
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\bin\Debug\net9.0\HR.Application.deps.json
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\bin\Debug\net9.0\HR.Application.dll
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\bin\Debug\net9.0\HR.Application.pdb
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\bin\Debug\net9.0\HR.Domain.dll
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\bin\Debug\net9.0\HR.Domain.pdb
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.csproj.AssemblyReference.cache
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.AssemblyInfoInputs.cache
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.AssemblyInfo.cs
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.csproj.CoreCompileInputs.cache
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Appli.BE4B350A.Up2Date
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.dll
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\refint\HR.Application.dll
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\HR.Application.pdb
+C:\Users\DEV055\source\repos\HrSystem\HR.Application\obj\Debug\net9.0\ref\HR.Application.dll
