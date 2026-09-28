@@ -1,11 +1,14 @@
 using FluentValidation;
+using HR.Application.Common.Security;
 using HR.Application.DTOs.Branches;
 using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles =AppRoles.Admin)]
 public class BranchesController : ControllerBase
 {
     private readonly IBranchService _branchService;
