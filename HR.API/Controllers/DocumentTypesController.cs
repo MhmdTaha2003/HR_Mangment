@@ -1,6 +1,8 @@
 using FluentValidation;
+using HR.Application.Common.Security;
 using HR.Application.DTOs.DocumentTypes;
 using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.API.Controllers;
@@ -31,6 +33,7 @@ public class DocumentTypesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<ActionResult<DocumentTypeDto>> Create(CreateDocumentTypeDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createValidator.ValidateAsync(dto, cancellationToken);
@@ -48,6 +51,7 @@ public class DocumentTypesController : ControllerBase
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Update(long id, UpdateDocumentTypeDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _updateValidator.ValidateAsync(dto, cancellationToken);
@@ -57,6 +61,7 @@ public class DocumentTypesController : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken) => await _documentTypeService.DeleteAsync(id, cancellationToken) ? NoContent() : NotFound();
 }
 

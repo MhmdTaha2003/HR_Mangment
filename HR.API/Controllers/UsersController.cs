@@ -1,26 +1,34 @@
 ﻿using HR.Application.Common.Security;
 using HR.Application.DTOs.Users;
 using HR.Infrastructure.Identity;
+using HR.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HR.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = AppRoles.Admin)]
+[Authorize(Policy = AppPolicies.AdminOnly)]
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _dbContext;
 
-    public UsersController(UserManager<ApplicationUser> userManager)
+    public UsersController(
+        UserManager<ApplicationUser> userManager,
+        ApplicationDbContext dbContext)
     {
         _userManager = userManager;
+        _dbContext = dbContext;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserDto dto)
+    public async Task<IActionResult> Create(
+        CreateUserDto dto,
+        CancellationToken cancellationToken)
     {
         if (!AppRoles.All.Contains(dto.Role))
         {
@@ -41,17 +49,69 @@ public class UsersController : ControllerBase
             });
         }
 
+        if (dto.EmployeeId is long employeeId)
+        {
+            var employeeExists = await _dbContext.Employees
+                .AnyAsync(employee => employee.Id == employeeId, cancellationToken);
+
+            if (!employeeExists)
+            {
+                return NotFound(new
+                {
+                    message = $"Employee with ID {employeeId} was not found."
+                });
+            }
+
+            var employeeAlreadyLinked = await _userManager.Users
+                .AnyAsync(user => user.EmployeeId == employeeId, cancellationToken);
+
+            if (employeeAlreadyLinked)
+            {
+                return Conflict(new
+                {
+                    message = $"Employee with ID {employeeId} is already linked to a user."
+                });
+            }
+        }
+
         var user = new ApplicationUser
         {
             UserName = dto.Email,
             Email = dto.Email,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            EmployeeId = dto.EmployeeId
         };
 
-        var result =
-            await _userManager.CreateAsync(
+        IdentityResult result;
+
+        try
+        {
+            result = await _userManager.CreateAsync(
                 user,
                 dto.Password);
+        }
+        catch (DbUpdateException) when (dto.EmployeeId is long linkedEmployeeId)
+        {
+            if (!await _dbContext.Employees
+                    .AnyAsync(employee => employee.Id == linkedEmployeeId, cancellationToken))
+            {
+                return NotFound(new
+                {
+                    message = $"Employee with ID {linkedEmployeeId} was not found."
+                });
+            }
+
+            if (await _userManager.Users
+                    .AnyAsync(existing => existing.EmployeeId == linkedEmployeeId, cancellationToken))
+            {
+                return Conflict(new
+                {
+                    message = $"Employee with ID {linkedEmployeeId} is already linked to a user."
+                });
+            }
+
+            throw;
+        }
 
         if (!result.Succeeded)
         {
@@ -95,6 +155,7 @@ public class UsersController : ControllerBase
         {
             user.Id,
             user.Email,
+            user.EmployeeId,
             Role = dto.Role
         });
     }

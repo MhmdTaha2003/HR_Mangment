@@ -1,10 +1,13 @@
 using FluentValidation;
+using HR.Application.Common.Security;
 using HR.Application.DTOs.EmployeeDocuments;
 using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.API.Controllers;
 [ApiController, Route("api/[controller]")]
+[Authorize(Policy = AppPolicies.HRManagement)]
 public class EmployeeDocumentsController : ControllerBase
 {
     private readonly IEmployeeDocumentService _employeeDocumentService;

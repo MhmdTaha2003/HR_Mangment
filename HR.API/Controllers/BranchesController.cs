@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace HR.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles =AppRoles.Admin)]
 public class BranchesController : ControllerBase
 {
     private readonly IBranchService _branchService;
@@ -38,6 +37,7 @@ public class BranchesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<ActionResult<BranchDto>> Create(CreateBranchDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createValidator.ValidateAsync(dto, cancellationToken);
@@ -60,6 +60,7 @@ public class BranchesController : ControllerBase
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Update(long id, UpdateBranchDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _updateValidator.ValidateAsync(dto, cancellationToken);
@@ -73,6 +74,7 @@ public class BranchesController : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {
         var deleted = await _branchService.DeleteAsync(id, cancellationToken);

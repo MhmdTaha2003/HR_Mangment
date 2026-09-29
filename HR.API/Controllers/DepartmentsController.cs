@@ -1,6 +1,8 @@
 using FluentValidation;
+using HR.Application.Common.Security;
 using HR.Application.DTOs.Departments;
 using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.API.Controllers;
@@ -31,6 +33,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<ActionResult<DepartmentDto>> Create(CreateDepartmentDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createValidator.ValidateAsync(dto, cancellationToken);
@@ -48,6 +51,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Update(long id, UpdateDepartmentDto dto, CancellationToken cancellationToken)
     {
         var validationResult = await _updateValidator.ValidateAsync(dto, cancellationToken);
@@ -64,6 +68,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AppPolicies.HRManagement)]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken) => await _departmentService.DeleteAsync(id, cancellationToken) ? NoContent() : NotFound();
 }
 

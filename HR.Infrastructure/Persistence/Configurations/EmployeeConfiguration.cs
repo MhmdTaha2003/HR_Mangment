@@ -1,6 +1,8 @@
 using HR.Domain.Entity;
+using HR.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace HR.Infrastructure.Persistence.Configurations;
 

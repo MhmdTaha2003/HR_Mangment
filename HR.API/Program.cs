@@ -1,4 +1,5 @@
 using HR.API.Authentication;
+using HR.API.Authorization;
 using HR.Application;
 using HR.Application.Interfaces.Authentication;
 using HR.Infrastructure;
@@ -67,7 +68,7 @@ builder.Services
             };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAppAuthorization();
 
 var app = builder.Build();
 

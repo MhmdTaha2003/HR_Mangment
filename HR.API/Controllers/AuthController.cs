@@ -1,6 +1,7 @@
 ﻿using HR.Application.DTOs.Auth;
 using HR.Application.Interfaces.Authentication;
 using HR.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<ActionResult<LoginResponseDto>> Login(
         LoginRequestDto request)
     {

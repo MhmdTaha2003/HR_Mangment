@@ -1,10 +1,13 @@
 using FluentValidation;
+using HR.Application.Common.Security;
 using HR.Application.DTOs.LeaveRequestApprovals;
 using HR.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.API.Controllers;
 [ApiController, Route("api/[controller]")]
+[Authorize(Policy = AppPolicies.LeaveApproval)]
 public class LeaveRequestApprovalsController : ControllerBase
 {
     private readonly ILeaveRequestApprovalService _leaveRequestApprovalService;

@@ -24,5 +24,16 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.Entity<ApplicationUser>()
+        .HasOne(x => x.Employee)
+        .WithOne()
+        .HasForeignKey<ApplicationUser>(x => x.EmployeeId)
+        .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<ApplicationUser>()
+        .HasIndex(x => x.EmployeeId)
+        .IsUnique()
+        .HasFilter("[EmployeeId] IS NOT NULL");
     }
 }
