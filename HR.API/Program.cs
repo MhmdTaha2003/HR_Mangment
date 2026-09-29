@@ -33,6 +33,17 @@ var jwtAudience = builder.Configuration["Jwt:Audience"]
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT key is missing.");
 
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("JWT key must not be empty or whitespace.");
+}
+
+if (Encoding.UTF8.GetByteCount(jwtKey) < 32)
+{
+    throw new InvalidOperationException(
+        "JWT key must be at least 256 bits (32 UTF-8 bytes).");
+}
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -71,9 +82,7 @@ using (var scope = app.Services.CreateScope())
         scope.ServiceProvider
             .GetRequiredService<RoleManager<IdentityRole>>();
 
-    var userManager =
-        scope.ServiceProvider
-            .GetRequiredService<UserManager<ApplicationUser>>();
+    await IdentitySeeder.SeedRolesAsync(roleManager);
 
     var adminEmail =
         builder.Configuration["SeedAdmin:Email"];
@@ -84,8 +93,11 @@ using (var scope = app.Services.CreateScope())
     if (!string.IsNullOrWhiteSpace(adminEmail) &&
         !string.IsNullOrWhiteSpace(adminPassword))
     {
-        await IdentitySeeder.SeedAsync(
-            roleManager,
+        var userManager =
+            scope.ServiceProvider
+                .GetRequiredService<UserManager<ApplicationUser>>();
+
+        await IdentitySeeder.SeedAdminAsync(
             userManager,
             adminEmail,
             adminPassword);

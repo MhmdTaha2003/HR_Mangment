@@ -5,21 +5,33 @@ namespace HR.Infrastructure.Identity;
 
 public static class IdentitySeeder
 {
-    public static async Task SeedAsync(
-        RoleManager<IdentityRole> roleManager,
+    public static async Task SeedRolesAsync(
+        RoleManager<IdentityRole> roleManager)
+    {
+        foreach (var roleName in AppRoles.All)
+        {
+            if (await roleManager.RoleExistsAsync(roleName))
+            {
+                continue;
+            }
+
+            var createResult = await roleManager.CreateAsync(
+                new IdentityRole(roleName));
+
+            if (!createResult.Succeeded &&
+                !await roleManager.RoleExistsAsync(roleName))
+            {
+                throw new InvalidOperationException(
+                    $"Failed to create role '{roleName}': {FormatErrors(createResult)}");
+            }
+        }
+    }
+
+    public static async Task SeedAdminAsync(
         UserManager<ApplicationUser> userManager,
         string adminEmail,
         string adminPassword)
     {
-        foreach (var roleName in AppRoles.All)
-        {
-            if (!await roleManager.RoleExistsAsync(roleName))
-            {
-                await roleManager.CreateAsync(
-                    new IdentityRole(roleName));
-            }
-        }
-
         var admin = await userManager.FindByEmailAsync(adminEmail);
 
         if (admin is null)
@@ -36,20 +48,32 @@ public static class IdentitySeeder
 
             if (!createResult.Succeeded)
             {
-                var errors = string.Join(
-                    ", ",
-                    createResult.Errors.Select(e => e.Description));
+                admin = await userManager.FindByEmailAsync(adminEmail);
 
-                throw new InvalidOperationException(
-                    $"Failed to create admin user: {errors}");
+                if (admin is null)
+                {
+                    throw new InvalidOperationException(
+                        $"Failed to create admin user: {FormatErrors(createResult)}");
+                }
             }
         }
 
         if (!await userManager.IsInRoleAsync(admin, AppRoles.Admin))
         {
-            await userManager.AddToRoleAsync(
+            var roleResult = await userManager.AddToRoleAsync(
                 admin,
                 AppRoles.Admin);
+
+            if (!roleResult.Succeeded &&
+                !await userManager.IsInRoleAsync(admin, AppRoles.Admin))
+            {
+                throw new InvalidOperationException(
+                    $"Failed to assign the Admin role to '{adminEmail}': {FormatErrors(roleResult)}");
+            }
         }
     }
+
+    private static string FormatErrors(IdentityResult result) =>
+        string.Join(", ", result.Errors.Select(error =>
+            $"{error.Code}: {error.Description}"));
 }
