@@ -14,6 +14,7 @@ namespace HR.Application.Interfaces.Services;
 public interface IEmployeeDocumentService
 {
     Task<List<EmployeeDocumentDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeDocumentDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeDocumentDto?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeDocumentDto> CreateAsync(CreateEmployeeDocumentDto dto, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(long id, UpdateEmployeeDocumentDto dto, CancellationToken cancellationToken);

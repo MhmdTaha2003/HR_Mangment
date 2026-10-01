@@ -4,6 +4,7 @@ namespace HR.Application.Interfaces.Repositories;
 public interface IEmployeeLeaveBalanceRepository
 {
     Task<List<EmployeeLeaveBalance>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeLeaveBalance>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeLeaveBalance?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeLeaveBalance?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeLeaveBalance?> GetByKeyAsync(long employeeId, long leaveTypeId, int year, CancellationToken cancellationToken);

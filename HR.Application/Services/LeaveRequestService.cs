@@ -27,6 +27,7 @@ public class LeaveRequestService : ILeaveRequestService
     }
 
     public async Task<List<LeaveRequestDto>> GetAllAsync(CancellationToken cancellationToken) => (await _leaveRequestRepository.GetAllAsync(cancellationToken)).Select(Map).ToList();
+    public async Task<List<LeaveRequestDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => (await _leaveRequestRepository.GetByEmployeeIdAsync(employeeId, cancellationToken)).Select(Map).ToList();
     public async Task<LeaveRequestDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         var leaveRequest = await _leaveRequestRepository.GetByIdAsync(id, cancellationToken);

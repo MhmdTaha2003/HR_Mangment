@@ -68,7 +68,12 @@ builder.Services
             };
     });
 
+
 builder.Services.AddAppAuthorization();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 
 var app = builder.Build();
 

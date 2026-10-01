@@ -4,6 +4,7 @@ namespace HR.Application.Interfaces.Repositories;
 public interface IEmployeeDocumentRepository
 {
     Task<List<EmployeeDocument>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeDocument>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeDocument?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeDocument?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken);
     Task AddAsync(EmployeeDocument employeeDocument, CancellationToken cancellationToken);

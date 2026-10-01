@@ -14,6 +14,7 @@ public class EmployeeLeaveBalanceRepository : IEmployeeLeaveBalanceRepository
     }
 
     public Task<List<EmployeeLeaveBalance>> GetAllAsync(CancellationToken cancellationToken) => _context.EmployeeLeaveBalances.AsNoTracking().OrderByDescending(leaveBalance => leaveBalance.Year).ToListAsync(cancellationToken);
+    public Task<List<EmployeeLeaveBalance>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => _context.EmployeeLeaveBalances.AsNoTracking().Where(leaveBalance => leaveBalance.EmployeeId == employeeId).OrderByDescending(leaveBalance => leaveBalance.Year).ToListAsync(cancellationToken);
     public Task<EmployeeLeaveBalance?> GetByIdAsync(long id, CancellationToken cancellationToken) => _context.EmployeeLeaveBalances.AsNoTracking().FirstOrDefaultAsync(leaveBalance => leaveBalance.Id == id, cancellationToken);
     public Task<EmployeeLeaveBalance?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken) => _context.EmployeeLeaveBalances.FirstOrDefaultAsync(leaveBalance => leaveBalance.Id == id, cancellationToken);
     public Task<EmployeeLeaveBalance?> GetByKeyAsync(long employeeId, long leaveTypeId, int year, CancellationToken cancellationToken) => _context.EmployeeLeaveBalances.AsNoTracking().FirstOrDefaultAsync(leaveBalance => leaveBalance.EmployeeId == employeeId && leaveBalance.LeaveTypeId == leaveTypeId && leaveBalance.Year == year, cancellationToken);

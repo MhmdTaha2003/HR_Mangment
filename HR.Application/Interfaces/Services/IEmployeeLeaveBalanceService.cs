@@ -14,6 +14,7 @@ namespace HR.Application.Interfaces.Services;
 public interface IEmployeeLeaveBalanceService
 {
     Task<List<EmployeeLeaveBalanceDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeLeaveBalanceDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeLeaveBalanceDto?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeLeaveBalanceDto> CreateAsync(CreateEmployeeLeaveBalanceDto dto, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(long id, UpdateEmployeeLeaveBalanceDto dto, CancellationToken cancellationToken);

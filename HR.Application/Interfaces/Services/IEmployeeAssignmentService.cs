@@ -14,6 +14,7 @@ namespace HR.Application.Interfaces.Services;
 public interface IEmployeeAssignmentService
 {
     Task<List<EmployeeAssignmentDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeAssignmentDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeAssignmentDto?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeAssignmentDto> CreateAsync(CreateEmployeeAssignmentDto dto, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(long id, UpdateEmployeeAssignmentDto dto, CancellationToken cancellationToken);

@@ -30,6 +30,7 @@ public class EmployeeAssignmentService : IEmployeeAssignmentService
     }
 
     public async Task<List<EmployeeAssignmentDto>> GetAllAsync(CancellationToken cancellationToken) => (await _employeeAssignmentRepository.GetAllAsync(cancellationToken)).Select(Map).ToList();
+    public async Task<List<EmployeeAssignmentDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => (await _employeeAssignmentRepository.GetByEmployeeIdAsync(employeeId, cancellationToken)).Select(Map).ToList();
     public async Task<EmployeeAssignmentDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         var assignment = await _employeeAssignmentRepository.GetByIdAsync(id, cancellationToken);

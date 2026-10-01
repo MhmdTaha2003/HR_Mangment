@@ -21,6 +21,7 @@ public class EmployeeContractService : IEmployeeContractService
     }
 
     public async Task<List<EmployeeContractDto>> GetAllAsync(CancellationToken cancellationToken) => (await _employeeContractRepository.GetAllAsync(cancellationToken)).Select(Map).ToList();
+    public async Task<List<EmployeeContractDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => (await _employeeContractRepository.GetByEmployeeIdAsync(employeeId, cancellationToken)).Select(Map).ToList();
     public async Task<EmployeeContractDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         var contract = await _employeeContractRepository.GetByIdAsync(id, cancellationToken);

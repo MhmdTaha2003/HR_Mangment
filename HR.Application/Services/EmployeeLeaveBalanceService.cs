@@ -24,6 +24,7 @@ public class EmployeeLeaveBalanceService : IEmployeeLeaveBalanceService
     }
 
     public async Task<List<EmployeeLeaveBalanceDto>> GetAllAsync(CancellationToken cancellationToken) => (await _employeeLeaveBalanceRepository.GetAllAsync(cancellationToken)).Select(Map).ToList();
+    public async Task<List<EmployeeLeaveBalanceDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => (await _employeeLeaveBalanceRepository.GetByEmployeeIdAsync(employeeId, cancellationToken)).Select(Map).ToList();
     public async Task<EmployeeLeaveBalanceDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         var leaveBalance = await _employeeLeaveBalanceRepository.GetByIdAsync(id, cancellationToken);

@@ -4,6 +4,7 @@ namespace HR.Application.Interfaces.Repositories;
 public interface ILeaveRequestRepository
 {
     Task<List<LeaveRequest>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<LeaveRequest>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<LeaveRequest?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<LeaveRequest?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken);
     Task<bool> ExistsAsync(long id, CancellationToken cancellationToken);

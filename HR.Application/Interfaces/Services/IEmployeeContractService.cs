@@ -14,6 +14,7 @@ namespace HR.Application.Interfaces.Services;
 public interface IEmployeeContractService
 {
     Task<List<EmployeeContractDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<EmployeeContractDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<EmployeeContractDto?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<EmployeeContractDto> CreateAsync(CreateEmployeeContractDto dto, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(long id, UpdateEmployeeContractDto dto, CancellationToken cancellationToken);

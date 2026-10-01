@@ -14,6 +14,7 @@ namespace HR.Application.Interfaces.Services;
 public interface ILeaveRequestService
 {
     Task<List<LeaveRequestDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<LeaveRequestDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken);
     Task<LeaveRequestDto?> GetByIdAsync(long id, CancellationToken cancellationToken);
     Task<LeaveRequestDto> CreateAsync(CreateLeaveRequestDto dto, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(long id, UpdateLeaveRequestDto dto, CancellationToken cancellationToken);

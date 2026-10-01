@@ -15,6 +15,7 @@ public class LeaveRequestRepository : ILeaveRequestRepository
     }
 
     public Task<List<LeaveRequest>> GetAllAsync(CancellationToken cancellationToken) => _context.LeaveRequests.AsNoTracking().OrderByDescending(leaveRequest => leaveRequest.RequestedAt).ToListAsync(cancellationToken);
+    public Task<List<LeaveRequest>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => _context.LeaveRequests.AsNoTracking().Where(leaveRequest => leaveRequest.EmployeeId == employeeId).OrderByDescending(leaveRequest => leaveRequest.RequestedAt).ToListAsync(cancellationToken);
     public Task<LeaveRequest?> GetByIdAsync(long id, CancellationToken cancellationToken) => _context.LeaveRequests.AsNoTracking().FirstOrDefaultAsync(leaveRequest => leaveRequest.Id == id, cancellationToken);
     public Task<LeaveRequest?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken) => _context.LeaveRequests.FirstOrDefaultAsync(leaveRequest => leaveRequest.Id == id, cancellationToken);
     public Task<bool> ExistsAsync(long id, CancellationToken cancellationToken) => _context.LeaveRequests.AnyAsync(leaveRequest => leaveRequest.Id == id, cancellationToken);

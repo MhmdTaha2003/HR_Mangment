@@ -14,6 +14,7 @@ public class EmployeeContractRepository : IEmployeeContractRepository
     }
 
     public Task<List<EmployeeContract>> GetAllAsync(CancellationToken cancellationToken) => _context.EmployeeContracts.AsNoTracking().OrderByDescending(contract => contract.StartDate).ToListAsync(cancellationToken);
+    public Task<List<EmployeeContract>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => _context.EmployeeContracts.AsNoTracking().Where(contract => contract.EmployeeId == employeeId).OrderByDescending(contract => contract.StartDate).ToListAsync(cancellationToken);
     public Task<EmployeeContract?> GetByIdAsync(long id, CancellationToken cancellationToken) => _context.EmployeeContracts.AsNoTracking().FirstOrDefaultAsync(contract => contract.Id == id, cancellationToken);
     public Task<EmployeeContract?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken) => _context.EmployeeContracts.FirstOrDefaultAsync(contract => contract.Id == id, cancellationToken);
     public Task<bool> NumberExistsAsync(string number, CancellationToken cancellationToken) => _context.EmployeeContracts.AnyAsync(contract => contract.ContractNumber == number, cancellationToken);

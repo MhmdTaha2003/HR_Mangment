@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IJobTitleService, JobTitleService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IEmployeeAssignmentService, EmployeeAssignmentService>();
+        services.AddScoped<IManagerTeamService, ManagerTeamService>();
         services.AddScoped<IEmployeeContractService, EmployeeContractService>();
         services.AddScoped<IDocumentTypeService, DocumentTypeService>();
         services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();

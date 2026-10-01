@@ -24,6 +24,7 @@ public class EmployeeDocumentService : IEmployeeDocumentService
     }
 
     public async Task<List<EmployeeDocumentDto>> GetAllAsync(CancellationToken cancellationToken) => (await _employeeDocumentRepository.GetAllAsync(cancellationToken)).Select(Map).ToList();
+    public async Task<List<EmployeeDocumentDto>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken) => (await _employeeDocumentRepository.GetByEmployeeIdAsync(employeeId, cancellationToken)).Select(Map).ToList();
     public async Task<EmployeeDocumentDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         var employeeDocument = await _employeeDocumentRepository.GetByIdAsync(id, cancellationToken);
