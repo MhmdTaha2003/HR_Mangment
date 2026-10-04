@@ -1,32 +1,7 @@
-# React + TypeScript + Vite
+# HR System frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Run `npm install`, copy `.env.example` to `.env.local`, and set `VITE_API_BASE_URL` to the API origin without `/api`. Run `npm run dev` for development; `npm run build` and `npm run lint` for checks.
 
-Currently, two official plugins are available:
+The backend HTTP launch profile uses `http://localhost:5099`; HTTPS uses `https://localhost:7259`. Set the API configuration key `Frontend:Origin` (environment variable `Frontend__Origin`) to the frontend origin, such as `http://localhost:5173`, to enable CORS. In production, set `VITE_API_BASE_URL` at build time. Login uses `POST /api/Auth/login`; the returned token, expiry, email, and roles are stored in local storage, cleared at expiry or logout. Use `authHeaders()` from `src/auth.ts` for future protected requests.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The Employee Dashboard sends the bearer token to `GET /api/Employees/me`, `GET /api/EmployeeLeaveBalances/me`, and `GET /api/LeaveRequests/me`. It loads leave type names from `GET /api/LeaveTypes`. The dashboard uses only the signed-in employee's `/me` records and displays the five most recent requests. Admin, HR, and Manager routes remain protected placeholders.

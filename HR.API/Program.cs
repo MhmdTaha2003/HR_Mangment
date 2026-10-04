@@ -13,6 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+var frontendOrigin = builder.Configuration["Frontend:Origin"];
+if (!string.IsNullOrWhiteSpace(frontendOrigin))
+{
+    builder.Services.AddCors(options =>
+        options.AddPolicy("Frontend", policy =>
+            policy.WithOrigins(frontendOrigin).AllowAnyHeader().AllowAnyMethod()));
+}
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -119,6 +127,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+if (!string.IsNullOrWhiteSpace(frontendOrigin))
+{
+    app.UseCors("Frontend");
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

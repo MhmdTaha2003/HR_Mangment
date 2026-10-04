@@ -145,4 +145,25 @@ public class ManagerAuthorizationTests
         Assert.Equal([10L], await teams.GetTeamEmployeeIdsAsync(5));
         Assert.False(await teams.IsEmployeeInTeamAsync(5, 20));
     }
+
+    [Fact]
+    public async Task Manager_cannot_action_request_after_direct_report_assignment_ends()
+    {
+        var current = false;
+        var repo = Proxy<IEmployeeAssignmentRepository>((method, args) => method.Name switch
+        {
+            "IsCurrentDirectReportAsync" => Task.FromResult(current && (long)args[0]! == 5 && (long)args[1]! == 10),
+            _ => throw new NotSupportedException(method.Name)
+        });
+        var controller = Approvals(AppRoles.Manager,
+            new LeaveRequestApprovalDto(7, 1, 1, 5, ApprovalAction.Pending, null, null));
+        var team = new ManagerTeamService(repo);
+        Assert.IsType<NotFoundResult>(await controller.Update(7,
+            new UpdateLeaveRequestApprovalDto(ApprovalAction.Approved, null),
+            User(5), team, Requests(), default));
+        current = true;
+        Assert.IsType<NoContentResult>(await controller.Update(7,
+            new UpdateLeaveRequestApprovalDto(ApprovalAction.Approved, null),
+            User(5), team, Requests(), default));
+    }
 }

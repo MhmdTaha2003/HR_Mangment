@@ -11,7 +11,7 @@ public class EmployeeLeaveBalanceConfiguration : IEntityTypeConfiguration<Employ
         builder.ConfigureAuditableEntity();
         builder.Property(x => x.EntitledDays).HasPrecision(5, 2);
         builder.Property(x => x.CarriedForwardDays).HasPrecision(5, 2);
-        builder.Property(x => x.UsedDays).HasPrecision(5, 2);
+        builder.Property(x => x.UsedDays).HasPrecision(5, 2).IsConcurrencyToken();
         builder.Property(x => x.AdjustedDays).HasPrecision(5, 2);
         builder.Ignore(x => x.RemainingBalance);
         builder.HasIndex(x => new { x.EmployeeId, x.LeaveTypeId, x.Year }).IsUnique();

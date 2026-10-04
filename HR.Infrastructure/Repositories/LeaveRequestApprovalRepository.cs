@@ -18,6 +18,16 @@ public class LeaveRequestApprovalRepository : ILeaveRequestApprovalRepository
     public Task<LeaveRequestApproval?> GetTrackedByIdAsync(long id, CancellationToken cancellationToken) => _context.LeaveRequestApprovals.FirstOrDefaultAsync(approval => approval.Id == id, cancellationToken);
     public Task<bool> LevelExistsAsync(long r, int l, CancellationToken cancellationToken) => _context.LeaveRequestApprovals.AnyAsync(approval => approval.LeaveRequestId == r && approval.ApprovalLevel == l, cancellationToken);
     public async Task AddAsync(LeaveRequestApproval approval, CancellationToken cancellationToken) => await _context.LeaveRequestApprovals.AddAsync(approval, cancellationToken);
-    public async Task SaveChangesAsync(CancellationToken cancellationToken) => await _context.SaveChangesAsync(cancellationToken);
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException exception)
+        {
+            throw new InvalidOperationException("The leave request or balance changed. Reload and try again.", exception);
+        }
+    }
 }
 

@@ -12,7 +12,7 @@ public class LeaveRequestConfiguration : IEntityTypeConfiguration<LeaveRequest>
         builder.Property(x => x.RequestedDays).HasPrecision(5, 2);
         builder.Property(x => x.Reason).HasMaxLength(1000);
         builder.Property(x => x.AttachmentPath).HasMaxLength(500);
-        builder.Property(x => x.Status).HasConversion<int>();
+        builder.Property(x => x.Status).HasConversion<int>().IsConcurrencyToken();
         builder.HasOne(x => x.Employee).WithMany(x => x.LeaveRequests)
             .HasForeignKey(x => x.EmployeeId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.LeaveType).WithMany(x => x.LeaveRequests)
